@@ -1,0 +1,23 @@
+{
+    "name": "emagister/memcached-bundle",
+    "description": "A Symfony2 bundle to handle memcached connections",
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "3.7.x-dev",
+        "mockery/mockery": "dev-master",
+        "symfony/symfony": "2.1.x-dev"
+    },
+    "authors": [
+        {
+            "name": "Christian Soronellas",
+            "email": "csoronellas@emagister.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "target-dir": "Emagister/Bundle/MemcachedBundle",
+    "autoload": {
+        "psr-0": {
+            "Emagister\\Bundle\\MemcachedBundle": ""
+        }
+    }
+}
