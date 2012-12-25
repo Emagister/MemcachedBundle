@@ -94,12 +94,22 @@ class CreateMemcachedInstancesPass implements CompilerPassInterface
             $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_SOCKET_SEND_SIZE'), $config['memcached_options']['socket_send_size']));
             $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_SOCKET_RECV_SIZE'), $config['memcached_options']['socket_recv_size']));
             $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_CONNECT_TIMEOUT'), $config['memcached_options']['connect_timeout']));
-            $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_RETRY_TIMEOUT'), $config['memcached_options']['retry_timeout']));
+
+            if ($config['memcached_options']['retry_timeout'] > 0) {
+                $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_RETRY_TIMEOUT'), $config['memcached_options']['retry_timeout']));
+            }
+
             $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_SEND_TIMEOUT'), $config['memcached_options']['send_timeout']));
             $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_RECV_TIMEOUT'), $config['memcached_options']['recv_timeout']));
             $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_POLL_TIMEOUT'), $config['memcached_options']['poll_timeout']));
-            $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_CACHE_LOOKUPS'), (bool) $config['memcached_options']['cache_lookups']));
-            $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_SERVER_LIMIT_FAILURE'), $config['memcached_options']['server_failure_limit']));
+
+            if (true === (bool) $config['memcached_options']['cache_lookups']) {
+                $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_CACHE_LOOKUPS'), true));
+            }
+
+            if ($config['memcached_options']['server_failure_limit'] > 0) {
+                $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_SERVER_FAILURE_LIMIT'), $config['memcached_options']['server_failure_limit']));
+            }
         }
 
         $container->setDefinition(sprintf('emagister_memcached.memcached_instances.%s', $name), $memcached);
@@ -121,7 +131,7 @@ class CreateMemcachedInstancesPass implements CompilerPassInterface
                 $host['dsn'],
                 $host['port'],
                 $memcacheOptions['persistent'],
-                $host['weight'],
+                $host['weight'] <= 0 ? 1 : $host['weight'],
                 $memcacheOptions['timeout'],
                 $memcacheOptions['retry_interval'],
                 $memcacheOptions['status'],
