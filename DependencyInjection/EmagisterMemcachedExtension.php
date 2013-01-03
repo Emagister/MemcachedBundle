@@ -8,6 +8,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Definition;
+use LogicException;
 
 class EmagisterMemcachedExtension extends Extension
 {
@@ -65,6 +66,9 @@ class EmagisterMemcachedExtension extends Extension
         ;
 
         $container->setParameter('emagister_memcached.session.handler.type', $type);
+        $this->addClassesToCompile(array(
+            $definition->getClass()
+        ));
     }
 
     /**
@@ -99,6 +103,11 @@ class EmagisterMemcachedExtension extends Extension
      */
     private function newMemcachedInstance($name, array $config, ContainerBuilder $container)
     {
+        // Check if the Memcached extension is loaded
+        if (!extension_loaded('memcached')) {
+            throw LogicException('Memcached extension is not loaded! To configure memcached instances it MUST be loaded!');
+        }
+
         $memcached = new Definition('Memcached');
 
         // Check if it has to be persistent
@@ -174,6 +183,11 @@ class EmagisterMemcachedExtension extends Extension
      */
     private function newMemcacheInstance($name, array $config, ContainerBuilder $container)
     {
+        // Check if the Memcache extension is loaded
+        if (!extension_loaded('memcache')) {
+            throw LogicException('Memcache extension is not loaded! To configure memcache instances it MUST be loaded!');
+        }
+
         $memcache = new Definition('Memcache');
         foreach ((array) $config['hosts'] as $host) {
             $memcacheOptions = isset($host['memcache_options']) ? $host['memcache_options'] : array('persistent' => true, 'timeout' => 1, 'retry_interval' => 15, 'status' => true);

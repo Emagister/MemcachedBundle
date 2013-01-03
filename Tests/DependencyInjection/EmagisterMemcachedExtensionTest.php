@@ -4,7 +4,6 @@ namespace Emagister\Bundle\MemcachedBundle\Tests\DependencyInjection;
 
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
 use Emagister\Bundle\MemcachedBundle\DependencyInjection\EmagisterMemcachedExtension;
 use PHPUnit_Framework_TestCase;
@@ -27,12 +26,27 @@ class EmagisterMemcachedExtensionTest extends PHPUnit_Framework_TestCase
         $this->object = null;
     }
 
-    public function testLoadInstances()
+    public function testLoadMemcachedInstances()
     {
-        $config = $this->parseYaml($this->getYamlConfigForInstances());
+        if (!extension_loaded('memcached')) {
+            $this->markTestSkipped('This test needs memcached extension to run!');
+        }
+
+        $config = $this->parseYaml($this->getYamlConfigForMemcachedInstances());
         $this->object->load($config, $container = new ContainerBuilder());
 
         $this->assertTrue($container->has('emagister_memcached.memcached_instances.ns1'));
+    }
+
+    public function testLoadMemcacheInstances()
+    {
+        if (!extension_loaded('memcache')) {
+            $this->markTestSkipped('This test needs memcache extension to run!');
+        }
+
+        $config = $this->parseYaml($this->getYamlConfigForMemcacheInstances());
+        $this->object->load($config, $container = new ContainerBuilder());
+
         $this->assertTrue($container->has('emagister_memcached.memcache_instances.ns2'));
     }
 
@@ -41,6 +55,10 @@ class EmagisterMemcachedExtensionTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadSessionSupport($type, $method)
     {
+        if (!extension_loaded($type)) {
+            $this->markTestSkipped(sprintf('This test needs %s extesion to run', $type));
+        }
+
         $config = $this->parseYaml($this->{$method}());
         $this->object->load($config, $container = new ContainerBuilder());
 
@@ -49,6 +67,10 @@ class EmagisterMemcachedExtensionTest extends PHPUnit_Framework_TestCase
 
     public function testLoadMemcacheOptions()
     {
+        if (!extension_loaded('memcache')) {
+            $this->markTestSkipped('This test needs memcache extension to run!');
+        }
+
         $expected = array(
             'allow_failover' => true,
             'max_failover_attempts' => 20,
@@ -91,7 +113,7 @@ class EmagisterMemcachedExtensionTest extends PHPUnit_Framework_TestCase
         return $parser->parse($yaml);
     }
 
-    private function getYamlConfigForInstances()
+    private function getYamlConfigForMemcachedInstances()
     {
         return <<<EOY
 emagister_memcached:
@@ -121,6 +143,14 @@ emagister_memcached:
                 poll_timeout: 1
                 cache_lookups: true
                 server_failure_limit: 1
+EOY;
+    }
+
+    private function getYamlConfigForMemcacheInstances()
+    {
+        return <<<EOY
+emagister_memcached:
+    instances:
         ns2:
             type: memcache
             hosts:

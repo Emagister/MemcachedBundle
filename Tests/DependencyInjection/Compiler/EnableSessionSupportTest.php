@@ -27,6 +27,7 @@ class EnableSessionSupportTest extends PHPUnit_Framework_TestCase
     {
         $container = Mockery::mock('\Symfony\Component\DependencyInjection\ContainerBuilder');
         $container->shouldReceive('hasParameter')->with('emagister_memcached.session.handler.type')->andReturn(true);
+        $container->shouldReceive('hasAlias')->with('session.storage')->andReturn(true);
         $container->shouldReceive('getParameter')->with('emagister_memcached.session.handler.type')->andReturn('memcached');
         $container->shouldReceive('setAlias')->with('session.handler', 'session.handler.memcached');
 

@@ -16,7 +16,10 @@ class EnableSessionSupport implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasParameter('emagister_memcached.session.handler.type')) {
+        // If no handler type specified or no is active session support, return
+        if (!$container->hasParameter('emagister_memcached.session.handler.type')
+            || !$container->hasAlias('session.storage')
+        ) {
             return;
         }
 
