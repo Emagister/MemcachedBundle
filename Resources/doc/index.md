@@ -13,7 +13,7 @@ file.
 ```json
 {
     "require": {
-        "emagister/memcached-bundle": "dev-master"
+        "emagister/memcached-bundle": "0.1.*"
     }
 }
 ```
