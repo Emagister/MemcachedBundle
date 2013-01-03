@@ -2,4 +2,4 @@ Resources/doc       export-ignore
 Resources/meta      export-ignore
 Tests               export-ignore
 phpunit.xml.dist    export-ignore
-README.md           export-ignore
+README.md           expsyort-ignore
