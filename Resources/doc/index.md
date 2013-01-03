@@ -95,12 +95,12 @@ extension documentation in the PHP site
 
 #### Memcached ####
 
-    * http://php.net/manual/en/memcached.constants.php (Memcached configuration reference per instance)
+* http://php.net/manual/en/memcached.constants.php (Memcached configuration reference per instance)
 
 #### Memcache ####
 
-    * http://php.net/manual/en/memcache.ini.php (Memcache configuration reference)
-    * http://php.net/manual/en/memcache.addserver.php (Memcache connection options)
+* http://php.net/manual/en/memcache.ini.php (Memcache configuration reference)
+* http://php.net/manual/en/memcache.addserver.php (Memcache connection options)
 
 ### Session Support ###
 
