@@ -4,7 +4,7 @@ namespace Emagister\Bundle\MemcachedBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Emagister\Bundle\MemcachedBundle\DependencyInjection\Compiler\CreateMemcachedInstancesPass;
+use Emagister\Bundle\MemcachedBundle\DependencyInjection\Compiler\EnableSessionSupport;
 
 class EmagisterMemcachedBundle extends Bundle
 {
@@ -12,6 +12,6 @@ class EmagisterMemcachedBundle extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new CreateMemcachedInstancesPass());
+        $container->addCompilerPass(new EnableSessionSupport());
     }
 }
