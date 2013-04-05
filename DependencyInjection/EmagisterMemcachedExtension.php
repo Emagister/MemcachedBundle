@@ -61,7 +61,7 @@ class EmagisterMemcachedExtension extends Extension
     {
         $definition = $container->findDefinition(sprintf('session.handler.%s', $type));
         $definition
-            ->addArgument(new Reference($instanceId))
+            ->addArgument(new Reference('emagister_memcached.memcached_instances.'.$instanceId))
             ->addArgument($options)
         ;
 
