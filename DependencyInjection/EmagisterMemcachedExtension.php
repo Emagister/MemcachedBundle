@@ -105,7 +105,7 @@ class EmagisterMemcachedExtension extends Extension
     {
         // Check if the Memcached extension is loaded
         if (!extension_loaded('memcached')) {
-            throw LogicException('Memcached extension is not loaded! To configure memcached instances it MUST be loaded!');
+            throw new \LogicException('Memcached extension is not loaded! To configure memcached instances it MUST be loaded!');
         }
 
         $memcached = new Definition('Memcached');
@@ -185,7 +185,7 @@ class EmagisterMemcachedExtension extends Extension
     {
         // Check if the Memcache extension is loaded
         if (!extension_loaded('memcache')) {
-            throw LogicException('Memcache extension is not loaded! To configure memcache instances it MUST be loaded!');
+            throw new \LogicException('Memcache extension is not loaded! To configure memcache instances it MUST be loaded!');
         }
 
         $memcache = new Definition('Memcache');
